@@ -18,7 +18,7 @@ func TestFoo(t *testing.T) {
 
 	result, err := github.ParseSearchHTML(htmlbody)
 	if err != nil {
-
+		t.Fatalf("%v\n", err)
 	}
 	for _, item := range result {
 		fmt.Printf("item: %+v\n", item)

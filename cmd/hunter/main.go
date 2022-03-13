@@ -1,18 +1,30 @@
 package main
 
 import (
-	"fmt"
+	"encoding/csv"
 	"log"
+	"os"
 
 	"github.com/cshwan78/pkg/api/github"
 )
 
 func main() {
-	fmt.Printf("%s", "hello world")
-	res, ok := github.APISearch("xoxb-")
+	res, ok := github.GetSearchResult("xoxb-")
 	if ok != nil {
 		log.Fatalln(ok)
 		return
 	}
-	fmt.Printf("%s", res)
+	// fmt.Printf("%+v", res)
+
+	file, err := os.Create("./output.csv")
+	if err != nil {
+		panic(err)
+	}
+	wr := csv.NewWriter(file)
+
+	for _, searchResult := range res {
+		wr.Write([]string{searchResult.RepoName, searchResult.FilePath, searchResult.GithubWebPath}) //, searchResult.Snippet})
+	}
+
+	wr.Flush()
 }
